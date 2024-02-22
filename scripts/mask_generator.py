@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 import cv2 as cv
 import os
 
-import torch
-from segment_anything import SamPredictor, sam_model_registry
+'''import torch
+from segment_anything import SamPredictor, sam_model_registry'''
 
 class MaskGenerator():
     def __init__(self, blur : int, morpho : int):
@@ -154,44 +154,6 @@ class ThreshGenerator(MaskGenerator):
             cv.drawContours(result, [big_contour], 0, (255,255,255), cv.FILLED)
 
         return result
-
-'''# TODO adapt variables
-def get_bounding_box(threshold_min, threshold_max, img):
-
-    # Convert to graycsale
-    img_gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
-    # Blur the image for better edge detection
-    img_blur = cv.GaussianBlur(img_gray, (3,3), 0) 
-
-    canny_output = cv.Canny(img_blur, threshold_min, threshold_max)
-    canny_output = cv.morphologyEx(canny_output, cv.MORPH_CLOSE, cv.getStructuringElement(cv.MORPH_ELLIPSE, (3, 3)))
-    canny_output = cv.morphologyEx(canny_output, cv.MORPH_OPEN, cv.getStructuringElement(cv.MORPH_ELLIPSE, (3, 3)))
-    cv.imwrite(f"../images/test/masks/{os.path.splitext(os.path.basename(image_path))[0]}_canny.jpg", canny_output)
-
-    x,y,w,h = cv.boundingRect(canny_output)
-    
-
-    _, th_h = cv.threshold(img_blur,threshold_min,threshold_max ,cv.THRESH_BINARY+cv.THRESH_OTSU)
-
-    cv.imwrite(f"../images/test/masks/{os.path.splitext(os.path.basename(image_path))[0]}_treshold.jpg", th_h)
-
-    largestCountour = findSignificantContour(th_h)
-
-    contour_copy = img.copy()
-
-    cv.drawContours(contour_copy, [largestCountour], 0, (255,0,0), 3, lineType=cv.FILLED)
-
-    cv.imwrite(f"../images/test/masks/{os.path.splitext(os.path.basename(image_path))[0]}_contours.jpg", contour_copy)
-
-    x,y,w,h = cv.boundingRect(largestCountour)
-    
-    img_copy = img.copy()
-    cv.rectangle(img_copy,(x,y),(x+w,y+h),(0,0,255),3)
-    cv.imwrite(f"../images/test/masks/{os.path.splitext(os.path.basename(image_path))[0]}_box.jpg", img_copy)
-    
-    print(f"{x,y,w,h}")
-    return np.array([x,y, x+w, y+h])
-    '''
         
 
 
@@ -199,7 +161,9 @@ def get_bounding_box(threshold_min, threshold_max, img):
 
 np.random.seed(12345)
 
-'''CHECKPOINT_PATH = "sam_vit_h_4b8939.pth"
+''' To keep if we do segment_anything
+
+CHECKPOINT_PATH = "sam_vit_h_4b8939.pth"
 MODEL_TYPE = "vit_h"
 
 DEVICE = torch.device('cuda')
